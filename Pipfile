@@ -10,6 +10,8 @@ autopep8 = "*"
 django = "*"
 django-environ = "*"
 python-dotenv = "*"
+djangorestframework = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.8"
