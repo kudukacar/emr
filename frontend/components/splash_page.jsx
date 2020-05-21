@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Splash = () => {
+const SplashPage = () => {
   return (
     <div className="splashpage">
       <div className="title">The EMR for independent physical therapists</div>
@@ -23,4 +23,4 @@ const Splash = () => {
   )
 }
 
-export default Splash;
+export default SplashPage;

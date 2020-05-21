@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
-import Splash from "./splash";
+import SplashPage from "../splash_page";
 
 let container = null;
 beforeEach(() => {
@@ -17,7 +17,7 @@ afterEach(() => {
 
 it("renders the splash page", () => {
   act(() => {
-    render(<Splash />, container);
+    render(<SplashPage />, container);
   });
   expect(container.textContent).toContain("HIPAA");
 });
