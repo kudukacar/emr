@@ -13,6 +13,7 @@ python-dotenv = "*"
 djangorestframework = "*"
 coverage = "*"
 django-cors-headers = "*"
+zappa = "*"
 
 [requires]
 python_version = "3.8"

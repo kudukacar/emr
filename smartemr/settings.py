@@ -25,7 +25,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -39,10 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "corsheaders",
-    "rest_framework",
-
-    "backend.apps.BackendConfig",
+    'corsheaders',
+    'rest_framework',
+    'backend',
 ]
 
 MIDDLEWARE = [
@@ -129,6 +128,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+ALLOWED_HOSTS = ['127.0.0.1',
+                 '4edmgavrwe.execute-api.us-east-1.amazonaws.com', ]
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
