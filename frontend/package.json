@@ -20,7 +20,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "cypress:open": "cypress open",
-    "cy:run": "cypress run"
+    "cy:run": "cypress run",
+    "deploy": "aws s3 sync --delete build/ s3://smartemr",
+    "clearcache": "aws cloudfront create-invalidation --distribution-id E37G8FDHYLWLA1 --paths /index.html /"
   },
   "eslintConfig": {
     "extends": "react-app"
