@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from dotenv import load_dotenv
+from django.core.management.utils import get_random_secret_key
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,7 +24,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY") or get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", 'False') == 'True'
@@ -83,10 +85,10 @@ WSGI_APPLICATION = 'smartemr.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv("RDS_NAME"),
-        'USER': os.getenv("RDS_USER"),
-        'PASSWORD': os.getenv("RDS_PASSWORD"),
-        'HOST': os.getenv("RDS_HOST"),
+        'NAME': os.getenv("RDS_NAME") or os.getenv("DATABASE_NAME"),
+        'USER': os.getenv("RDS_USER") or os.getenv("DATABASE_USER"),
+        'PASSWORD': os.getenv("RDS_PASSWORD") or os.getenv("DATABASE_PASSWORD"),
+        'HOST': os.getenv("RDS_HOST", 'localhost'),
         'PORT': os.getenv("DATABASE_PORT"),
     }
 }
