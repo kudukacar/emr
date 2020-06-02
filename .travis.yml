@@ -3,11 +3,9 @@ jobs:
     - name: "Backend"
       python: 3.8
       language: python
-      env:
-        - DJANGO=3.0.6
       install:
         - pipenv install
-        - pipenv install django=$DJANGO
+        - pipenv install django=='3.0.6'
       script:
         - python manage.py test
       after_success:
@@ -20,7 +18,6 @@ jobs:
         - npm install -g travis-ci-cloudfront-invalidation
         - npm install
       script:
-        - npm start
         - npm test
         - npm run cy:test
         - npm run build
