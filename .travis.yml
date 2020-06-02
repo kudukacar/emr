@@ -5,7 +5,6 @@ jobs:
       language: python
       install:
         - pipenv install
-        - pipenv install django=='3.0.6'
       script:
         - python manage.py test
       after_success:
