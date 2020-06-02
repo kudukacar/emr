@@ -3,9 +3,11 @@ jobs:
     - name: "Backend"
       python: 3.8
       language: python
+      env:
+        - DJANGO=3.0.6
       install:
-        - pip install pipenv
         - pipenv install
+        - pipenv install django=$DJANGO
       script:
         - python manage.py test
       after_success:
@@ -20,7 +22,7 @@ jobs:
       script:
         - npm start
         - npm test
-        - npm run cy:run
+        - npm run cy:test
         - npm run build
       deploy:
         on:
@@ -32,4 +34,4 @@ jobs:
         skip_cleanup: true
         local_dir: build
       after_deploy:
-        - travis-ci-cloudfront-invalidation -a $AWS_ACCESS_KEY -s $AWS_SECRET_KEY -c $AWS_CLOUDFRONT_DIST_ID -i '/*' -b $TRAVIS_BRANCH -p $TRAVIS_PULL_REQUEST
+        - travis-ci-cloudfront-invalidation -a $AWS_ACCESS_KEY_ID -s $AWS_SECRET_ACCESS_KEY -c $AWS_CLOUDFRONT_DIST_ID -i '/*' -b $TRAVIS_BRANCH -p $TRAVIS_PULL_REQUEST
