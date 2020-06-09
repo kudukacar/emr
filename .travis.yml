@@ -1,0 +1,33 @@
+jobs:
+  include:
+    - name: "Backend"
+      python: 3.8
+      language: python
+      install:
+        - pipenv install
+      script:
+        - python manage.py test
+      after_success:
+        - test $TRAVIS_BRANCH = "master" && zappa update dev && zappa manage dev migrate
+    - name: "Frontend"
+      node_js: 12
+      language: node_js
+      install:
+        - cd frontend
+        - npm install -g travis-ci-cloudfront-invalidation
+        - npm install
+      script:
+        - npm test
+        - npm run cy:test
+        - npm run build
+      deploy:
+        on:
+          branch: master
+        provider: s3
+        access_key_id: $AWS_ACCESS_KEY_ID
+        secret_access_key: $AWS_SECRET_ACCESS_KEY
+        bucket: smartemr
+        skip_cleanup: true
+        local_dir: build
+      after_deploy:
+        - travis-ci-cloudfront-invalidation -a $AWS_ACCESS_KEY_ID -s $AWS_SECRET_ACCESS_KEY -c $AWS_CLOUDFRONT_DIST_ID -i '/*' -b $TRAVIS_BRANCH -p $TRAVIS_PULL_REQUEST
