@@ -16,6 +16,7 @@ django-cors-headers = "*"
 zappa = "*"
 psycopg2-binary = "*"
 zappa-django-utils = "*"
+djangorestframework-jwt = "*"
 
 [requires]
 python_version = "3.8"
