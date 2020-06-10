@@ -3,22 +3,23 @@ from django.contrib.auth import get_user_model
 
 
 class CustomUserManagerTests(TestCase):
-    def test_create_user(self):
+    def setUp(self):
         User = get_user_model()
-        user = User.objects.create_user(
+        self.user = User.objects.create_user(
             email='user@email.com', password='userpassword')
-        self.assertEqual(user.email, 'user@email.com')
-        self.assertTrue(user.is_active)
-        self.assertFalse(user.is_staff)
-        self.assertFalse(user.is_superuser)
-        self.assertIsNone(user.username)
+        self.superuser = User.objects.create_superuser(
+            email='superuser@email.com', password='superuserpassword')
+
+    def test_create_user(self):
+        self.assertEqual(self.user.email, 'user@email.com')
+        self.assertTrue(self.user.is_active)
+        self.assertFalse(self.user.is_staff)
+        self.assertFalse(self.user.is_superuser)
+        self.assertIsNone(self.user.username)
 
     def test_create_superuser(self):
-        User = get_user_model()
-        superuser = User.objects.create_superuser(
-            email='superuser@email.com', password='superuserpassword')
-        self.assertEqual(superuser.email, 'superuser@email.com')
-        self.assertTrue(superuser.is_active)
-        self.assertTrue(superuser.is_staff)
-        self.assertTrue(superuser.is_superuser)
-        self.assertIsNone(superuser.username)
+        self.assertEqual(self.superuser.email, 'superuser@email.com')
+        self.assertTrue(self.superuser.is_active)
+        self.assertTrue(self.superuser.is_staff)
+        self.assertTrue(self.superuser.is_superuser)
+        self.assertIsNone(self.superuser.username)
