@@ -16,8 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_jwt.views import obtain_jwt_token
+from backend.views import get_current_user, CreateUserView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('token-auth/', obtain_jwt_token)
+    path('token-auth/', obtain_jwt_token, name='tokenauth'),
+    path('current_user/', get_current_user, name='currentuser'),
+    path('users/', CreateUserView.as_view(), name='users')
 ]

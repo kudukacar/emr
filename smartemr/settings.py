@@ -145,6 +145,9 @@ REST_FRAMEWORK = {
     ),
 }
 
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'smartemr.utils.my_jwt_response_handler'}
+
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000", "https://d18umyxvxdcfnb.cloudfront.net",
 ]
