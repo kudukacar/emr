@@ -27,23 +27,28 @@ class CreateUserViewTest(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
 
-class GetCurrentUserTest(TestCase):
+class MyTokenObtainPairView(TestCase):
     def setUp(self):
-        self.user = {
-            'email': 'user@email.com',
-            'first_name': 'firstname',
-            'last_name': 'lastname',
-            'password': 'userpassword'
-        }
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            email='user@email.com',
+            password='userpassword'
+        )
 
-        self.token = client.post(
-            reverse('users'),
-            data=json.dumps(self.user),
+        self.response = client.post(
+            reverse('token_obtain_pair'),
+            data=json.dumps({'email': 'user@email.com',
+                             'password': 'userpassword'}),
             content_type='application/json'
-        ).data.get('token')
+        )
 
     def test_status_code(self):
-        client.credentials(HTTP_AUTHORIZATION=f'JWT {self.token}')
-        response = client.get(reverse('currentuser'))
-        print(response.data)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_contains_expected_fields(self):
+        self.assertEqual(set(self.response.data.keys()), set(
+            ['id', 'first_name', 'last_name', 'email', 'token']))
+
+    def test_contains_expected_tokens(self):
+        self.assertIsInstance(self.response.data['token']['access'], str)
+        self.assertIsInstance(self.response.data['token']['refresh'], str)
