@@ -4,8 +4,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #08203e;
-    background-color: #fff;
+    background-color: #8FC1E3;
 }
 
 .title {
@@ -30,19 +29,19 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 1px solid #87CEEB;
+    border: 1px solid white;
     border-radius: 5%;
     margin: 20px;
 }
 
 .fas.fa-shield-alt, .fas.fa-dollar-sign, .far.fa-smile {
     font-size: xx-large;
-    color: #87CEEB;
+    color: white;
     margin: 10px;
 }
 
 .startsmart {
-    background-color: #87CEEB;
+    background-color: white;
     padding: 10px 30px;
     border-radius: 5px;
     font-size: 20px;

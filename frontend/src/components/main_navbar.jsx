@@ -1,47 +1,74 @@
-import React from "react";
-import { NavLink, withRouter } from "react-router-dom";
+import React, { useState } from "react";
+import { withRouter } from "react-router-dom";
+import logo from "../assets/logo.png";
+import {
+  Collapse,
+  Container,
+  Navbar,
+  NavbarBrand,
+  NavbarToggler,
+  Nav,
+  NavItem,
+  NavLink,
+} from "reactstrap";
+import { NavLink as RRNavLink } from "react-router-dom";
 
-const MainNavbar = ({ authElement }) => {
+const MainNavbar = () => {
+  const [collapsed, setCollapsed] = useState(true);
+
+  const toggleNavbar = () => {
+    setCollapsed(!collapsed);
+  };
+
+  const closeNavbar = () => {
+    if (collapsed !== true) {
+      toggleNavbar();
+    }
+  };
+
   return (
-    <div>
-      <nav
-        className={"navbar navbar-expand-lg navbar-light"}
-        style={{
-          backgroundColor: "#87CEEB",
-          paddingRight: "100px",
-          paddingLeft: "100px",
-        }}
-      >
-        <NavLink className="navbar-brand" to="/">
-          SmartEMR
-        </NavLink>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarText"
-          aria-controls="navbarText"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarText">
-          <ul className="navbar-nav mr-auto">
-            <li className="nav-item active">
-              <NavLink className="nav-link" to="/">
-                About <span className="sr-only">(current)</span>
-              </NavLink>
-            </li>
-          </ul>
-          <ul className="nav navbar-nav navbar-right">
-            <li className="nav-item">
-              {authElement}
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </div>
+    <Container>
+      <Navbar className="navigation__navbar" light expand="md">
+        <NavbarBrand style={{ color: "#429fdd", fontWeight: "bold" }} href="/">
+          <img
+            src={logo}
+            alt="physical therapy EMR"
+            style={{ maxWidth: 40, maxHeight: 50, marginRight: "2%" }}
+          />
+          Smart EMR
+        </NavbarBrand>
+        <Container>
+          <NavbarToggler onClick={toggleNavbar} className="mr-2" />
+          <Collapse isOpen={!collapsed} navbar>
+            <Nav className="ml-auto" navbar>
+              <NavItem>
+                <NavLink
+                  onClick={closeNavbar}
+                  to="/"
+                  activeClassName="active"
+                  exact
+                  style={{ color: "#429fdd" }}
+                  tag={RRNavLink}
+                >
+                  About
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  onClick={closeNavbar}
+                  to="/login"
+                  activeClassName="active"
+                  style={{ color: "#429fdd" }}
+                  tag={RRNavLink}
+                >
+                  Login
+                </NavLink>
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </Container>
+      </Navbar>
+    </Container>
   );
 
 }

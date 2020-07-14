@@ -4,14 +4,9 @@ import MainNavbar from './main_navbar';
 import { NavLink, withRouter } from "react-router-dom";
 
 const LandingPage = () => {
-  const authElement = (
-    <NavLink className="nav-link" to="/login">
-      Login
-    </NavLink>
-  );
   return (
     <>
-      <MainNavbar authElement={authElement} />
+      <MainNavbar />
       <div className="landingpage">
         <div className="title">The EMR for independent physical therapists</div>
         <div className="subtitle">
