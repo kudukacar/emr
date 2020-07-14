@@ -6,7 +6,10 @@ import { NavLink, withRouter } from "react-router-dom";
 const LandingPage = () => {
   return (
     <>
-      <MainNavbar />
+      <MainNavbar
+        mainPage={"About"}
+        authPage={"Login"} 
+      />
       <div className="landingpage">
         <div className="title">The EMR for independent physical therapists</div>
         <div className="subtitle">

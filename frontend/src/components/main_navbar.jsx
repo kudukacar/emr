@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 import { NavLink as RRNavLink } from "react-router-dom";
 
-const MainNavbar = () => {
+const MainNavbar = ({ mainPage, authPage, handleLogout }) => {
   const [collapsed, setCollapsed] = useState(true);
 
   const toggleNavbar = () => {
@@ -29,7 +29,7 @@ const MainNavbar = () => {
   return (
     <Container>
       <Navbar className="navigation__navbar" light expand="md">
-        <NavbarBrand style={{ color: "#429fdd", fontWeight: "bold" }} href="/">
+        <NavbarBrand style={{ color: "#429fdd", fontWeight: "bold" }} href={mainPage === "About" ? "/" : "/dashboard"}>
           <img
             src={logo}
             alt="physical therapy EMR"
@@ -44,24 +44,29 @@ const MainNavbar = () => {
               <NavItem>
                 <NavLink
                   onClick={closeNavbar}
-                  to="/"
+                  to={mainPage === "About" ? "/" : "/dashboard"}
                   activeClassName="active"
                   exact
                   style={{ color: "#429fdd" }}
                   tag={RRNavLink}
                 >
-                  About
+                  {mainPage}
                 </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink
-                  onClick={closeNavbar}
-                  to="/login"
+                  onClick={() => {
+                    closeNavbar();
+                    if(authPage === "Logout") {
+                      handleLogout();
+                    }
+                  }}
+                  to={authPage === "Login" ? "/login" : "/dashboard"}
                   activeClassName="active"
                   style={{ color: "#429fdd" }}
                   tag={RRNavLink}
                 >
-                  Login
+                  {authPage}
                 </NavLink>
               </NavItem>
             </Nav>
