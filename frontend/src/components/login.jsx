@@ -1,45 +1,91 @@
 import React, { useState } from "react";
-import axiosInstance from "../util/axiosAPI";
+import gql from "graphql-tag";
+import { useMutation } from "@apollo/react-hooks";
+import './login.css';
+import MainNavbar from './main_navbar';
+import { withRouter, NavLink } from 'react-router-dom';
+import { TOKEN, EXPIRATION } from '../constants';
+
+const LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      user {
+        id
+        firstName
+        lastName
+      }
+      payload
+    }
+  }
+`;
 
 const Login = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [login] = useMutation(LOGIN);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axiosInstance.post('api/token/', {
-      email: email,
-      password: password
-    });
-    const { data } = response;
-    axiosInstance.defaults.headers['Authorization'] = "JWT " + data.token.access
-    localStorage.setItem('access_token', data.token.access);
-    localStorage.setItem('refresh_token', data.token.refresh);
+    try {
+      const response = await login({
+        variables: {
+          email: email,
+          password: password,
+        }
+      });
+      sessionStorage.setItem(TOKEN, response.data.login.token);
+      const expiration = new Date(response.data.login.payload.exp * 1000).toLocaleString();
+      sessionStorage.setItem(EXPIRATION, expiration);
+      history.push("/dashboard");
+    }
+    catch(e) {
+      setError(e.message.split(": ")[1])
+    }
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
-        <label>
-          Password
-          <input
-            type="text"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </label>
-        <input type="submit" value="Log in" />
-      </form>
-    </div>
+    <>
+      <MainNavbar />
+      <div className="container h-100">
+        <div className="row h-100 justify-content-center align-items-center">
+          <div className="col-10 col-md-8 col-lg-6">
+            <div className="login">Access SmartEMR</div>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Password</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="error">{error}</div>
+              <input type="submit" className="btn btn-primary" />
+            </form>
+          </div>
+        </div>
+      </div>
+      <div className="signup">
+        Don't have an account? <NavLink to="/signup">Sign up</NavLink>
+      </div>
+    </>
   );
 }
 
-export default Login;
+export default withRouter(Login);

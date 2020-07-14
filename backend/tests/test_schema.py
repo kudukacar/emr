@@ -110,9 +110,11 @@ class CreateUserTests(GraphQLTestCase):
     def test_create_user_duplicate_email(self):
 
         User = get_user_model()
+        email = 'user@email.com'
+        password = "userpassword"
         self.user = User.objects.create_user(
-            email='user@email.com',
-            password="userpassword"
+            email=email,
+            password=password
         )
 
         response = self.query(
@@ -129,8 +131,8 @@ class CreateUserTests(GraphQLTestCase):
             ''',
             op_name='createUser',
             variables={
-                'email': "user@email.com",
-                'password': "userpassword",
+                'email': email,
+                'password': password,
                 'firstName': "firstname",
                 'lastName': "lastname"
             }

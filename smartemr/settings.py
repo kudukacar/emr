@@ -50,15 +50,14 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
 ROOT_URLCONF = 'smartemr.urls'
@@ -176,3 +175,9 @@ AUTHENTICATION_BACKENDS = [
     'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+GRAPHQL_JWT = {
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_EXPIRATION_DELTA': timedelta(days=1),
+    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=1),
+}

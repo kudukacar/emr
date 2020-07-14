@@ -2,7 +2,9 @@ import graphene
 from graphene_django import DjangoObjectType
 from django.contrib.auth import get_user_model, authenticate, login
 from graphql_jwt.shortcuts import get_token
+from graphql_jwt.utils import get_payload
 import graphql_jwt
+from graphene.types.generic import GenericScalar
 
 
 class UserType(DjangoObjectType):
@@ -11,22 +13,19 @@ class UserType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    users = graphene.List(UserType)
     user = graphene.Field(UserType)
-
-    def resolve_users(self, info):
-        return get_user_model().objects.all()
 
     def resolve_user(self, info):
         user = info.context.user
-        if not user.is_authenticated:
-            raise Exception('Authentication credentials were not provided')
+        if user.is_anonymous:
+            raise Exception('Authentication failed')
         return user
 
 
 class LogIn(graphene.Mutation):
     user = graphene.Field(UserType)
     token = graphene.String()
+    payload = GenericScalar()
 
     class Arguments:
         email = graphene.String(required=True)
@@ -37,15 +36,17 @@ class LogIn(graphene.Mutation):
         user = authenticate(email=email, password=password)
 
         if user is None:
-            raise Exception('Please enter a correct username and password')
+            raise Exception('Please enter a valid username and password.')
 
         login(info.context, user)
-        return cls(user=user, token=get_token(user))
+        token = get_token(user)
+        return cls(user=user, token=token, payload=get_payload(token))
 
 
 class CreateUser(graphene.Mutation):
     user = graphene.Field(UserType)
     token = graphene.String()
+    payload = GenericScalar()
 
     class Arguments:
         email = graphene.String(required=True)
@@ -61,8 +62,8 @@ class CreateUser(graphene.Mutation):
         )
         user.set_password(password)
         user.save()
-
-        return CreateUser(user=user, token=get_token(user))
+        token = get_token(user)
+        return CreateUser(user=user, token=token, payload=get_payload(token))
 
 
 class Mutation(graphene.ObjectType):
