@@ -1,79 +1,55 @@
-import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
+import React from "react";
+import { withRouter, NavLink } from "react-router-dom";
 import logo from "../assets/logo.png";
 import {
-  Collapse,
-  Container,
   Navbar,
-  NavbarBrand,
-  NavbarToggler,
-  Nav,
-  NavItem,
-  NavLink,
-} from "reactstrap";
-import { NavLink as RRNavLink } from "react-router-dom";
+  Nav
+} from "react-bootstrap";
 
 const MainNavbar = ({ mainPage, authPage, handleLogout }) => {
-  const [collapsed, setCollapsed] = useState(true);
-
-  const toggleNavbar = () => {
-    setCollapsed(!collapsed);
-  };
-
-  const closeNavbar = () => {
-    if (collapsed !== true) {
-      toggleNavbar();
-    }
-  };
-
   return (
-    <Container>
-      <Navbar className="navigation__navbar" light expand="md">
-        <NavbarBrand style={{ color: "#429fdd", fontWeight: "bold" }} href={mainPage === "About" ? "/" : "/dashboard"}>
-          <img
-            src={logo}
-            alt="physical therapy EMR"
-            style={{ maxWidth: 40, maxHeight: 50, marginRight: "2%" }}
-          />
-          Smart EMR
-        </NavbarBrand>
-        <Container>
-          <NavbarToggler onClick={toggleNavbar} className="mr-2" />
-          <Collapse isOpen={!collapsed} navbar>
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink
-                  onClick={closeNavbar}
-                  to={mainPage === "About" ? "/" : "/dashboard"}
-                  activeClassName="active"
-                  exact
-                  style={{ color: "#429fdd" }}
-                  tag={RRNavLink}
-                >
-                  {mainPage}
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  onClick={() => {
-                    closeNavbar();
-                    if(authPage === "Logout") {
-                      handleLogout();
-                    }
-                  }}
-                  to={authPage === "Login" ? "/login" : "/dashboard"}
-                  activeClassName="active"
-                  style={{ color: "#429fdd" }}
-                  tag={RRNavLink}
-                >
-                  {authPage}
-                </NavLink>
-              </NavItem>
-            </Nav>
-          </Collapse>
-        </Container>
-      </Navbar>
-    </Container>
+    <Navbar
+      collapseOnSelect
+      bg="dark"
+      expand="lg"
+      style={{ paddingLeft: "40px", paddingRight: "40px" }}
+    >
+      <Navbar.Brand
+        style={{ color: "#429fdd", fontWeight: "bold" }}
+        to={mainPage === "About" ? "/" : "/dashboard"}
+        as={NavLink}
+      >
+        <img
+          src={logo}
+          alt="physical therapy EMR"
+          width="30"
+          height="30"
+          className="d-inline-block align-top"
+        />{" "}
+        SmartEMR
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+      <Navbar.Collapse id="responsive-navbar-nav">
+        <Nav className="mr-auto"></Nav>
+        <Nav>
+          <Nav.Link
+            to={mainPage === "About" ? "/" : "/dashboard"}
+            style={{ color: "#429fdd" }}
+            as={NavLink}
+          >
+            {mainPage}
+          </Nav.Link>
+          <Nav.Link
+            onClick={handleLogout}
+            to="/login"
+            style={{ color: "#429fdd" }}
+            as={NavLink}
+          >
+            {authPage}
+          </Nav.Link>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 
 }

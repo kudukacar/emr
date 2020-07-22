@@ -13,3 +13,8 @@
     text-align: center;
     padding-top: 20px;
 }
+
+.loginbackground {
+    background-color: #8FC1E3;
+    min-height: 92vh;
+}

@@ -4,19 +4,25 @@ import './index.css';
 import Root from './components/Root';
 import * as serviceWorker from './serviceWorker';
 import "bootstrap/dist/css/bootstrap.min.css";
-import ApolloClient from "apollo-boost";
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { TOKEN } from './constants';
+import { setContext } from "@apollo/client/link/context";
 
-const client = new ApolloClient({
+const httpLink = createHttpLink({
   uri: "http://localhost:8000/graphql/",
-  request: (operation) => {
-    const token = sessionStorage.getItem(TOKEN);
-    operation.setContext({
-      headers: {
-        authorization: token ? `JWT ${token}` : "",
-      },
-    });
-  }
+});
+const authLink = setContext((_, { headers }) => {
+  const token = sessionStorage.getItem(TOKEN);
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `JWT ${token}` : "",
+    },
+  };
+});
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
 });
 
 ReactDOM.render(

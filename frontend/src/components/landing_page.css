@@ -1,5 +1,5 @@
 .landingpage {
-    min-height: 90vh;
+    min-height: 92vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -41,7 +41,7 @@
 }
 
 .startsmart {
-    background-color: white;
+    background-color:white;
     padding: 10px 30px;
     border-radius: 5px;
     font-size: 20px;

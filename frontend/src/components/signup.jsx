@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import MainNavbar from './main_navbar';
-import gql from "graphql-tag";
-import { useMutation } from "@apollo/react-hooks";
+import { gql, useMutation, useApolloClient } from "@apollo/client";
 import './login.css';
 import { withRouter } from 'react-router-dom';
-import { TOKEN, EXPIRATION } from '../constants';
+import Form from './form';
 
-const CREATEUSER = gql`
+export const CREATEUSER = gql`
   mutation CreateUser($email: String!, $password: String!, $firstName: String!, $lastName: String!) {
     createUser(email: $email, password: $password, firstName: $firstName, lastName: $lastName) {
       token
@@ -20,17 +19,19 @@ const CREATEUSER = gql`
   }
 `;
 
-const Signup = ({ history }) => {
+const Signup = ({ history, authenticator }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
   const [createUser] = useMutation(CREATEUSER);
+  const client = useApolloClient();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      await client.clearStore();
       const response = await createUser({
         variables: {
           firstName: firstName,
@@ -39,73 +40,30 @@ const Signup = ({ history }) => {
           password: password,
         },
       });
-      sessionStorage.setItem(TOKEN, response.data.createUser.token);
-      const expiration = new Date(response.data.createUser.payload.exp * 1000).toLocaleString();
-      sessionStorage.setItem(EXPIRATION, expiration);
+      authenticator.login(response.data.createUser.token, response.data.createUser.payload.exp);
       history.push("/dashboard"); 
     }
     catch(e) {
-      setError(e.message.split(": ")[2]);
+      setError(e.message.split(": ")[1]);
     }
   }
   return (
     <>
-      <MainNavbar />
-      <div className="container h-100">
-        <div className="row h-100 justify-content-center align-items-center">
-          <div className="col-10 col-md-8 col-lg-6">
-            <div className="login">Start using SmartEMR</div>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>First name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="First name"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Last name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Last name"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Email</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  minLength="8"
-                />
-              </div>
-              <div className="error">{error}</div>
-              <input type="submit" className="btn btn-primary" />
-            </form>
-          </div>
-        </div>
+      <MainNavbar mainPage={"About"} authPage={"Login"} />
+      <div className='loginbackground'>
+        <Form
+          signup={true}
+          firstName={firstName}
+          setFirstName={setFirstName}
+          lastName={lastName}
+          setLastName={setLastName}
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          error={error}
+          handleSubmit={handleSubmit}
+        />
       </div>
     </>
   );

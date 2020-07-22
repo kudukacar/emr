@@ -19,6 +19,7 @@ zappa-django-utils = "*"
 djangorestframework-simplejwt = "*"
 graphene-django = "*"
 django-graphql-jwt = "*"
+django-graphql-extensions = "*"
 
 [requires]
 python_version = "3.8"

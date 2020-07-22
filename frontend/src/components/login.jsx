@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import gql from "graphql-tag";
-import { useMutation } from "@apollo/react-hooks";
+import { gql, useMutation, useApolloClient } from "@apollo/client";
 import './login.css';
 import MainNavbar from './main_navbar';
 import { withRouter, NavLink } from 'react-router-dom';
-import { TOKEN, EXPIRATION } from '../constants';
+import Form from './form';
 
-const LOGIN = gql`
+export const LOGIN = gql`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
@@ -20,69 +19,47 @@ const LOGIN = gql`
   }
 `;
 
-const Login = ({ history }) => {
+const Login = ({ authenticator, history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [login] = useMutation(LOGIN);
+  const client = useApolloClient();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      await client.clearStore();
       const response = await login({
         variables: {
           email: email,
           password: password,
         }
       });
-      sessionStorage.setItem(TOKEN, response.data.login.token);
-      const expiration = new Date(response.data.login.payload.exp * 1000).toLocaleString();
-      sessionStorage.setItem(EXPIRATION, expiration);
+      authenticator.login(response.data.login.token, response.data.login.payload.exp);
       history.push("/dashboard");
     }
     catch(e) {
-      setError(e.message.split(": ")[1])
+      setError(e.message)
     }
   }
 
   return (
     <>
-      <MainNavbar />
-      <div className="container h-100">
-        <div className="row h-100 justify-content-center align-items-center">
-          <div className="col-10 col-md-8 col-lg-6">
-            <div className="login">Access SmartEMR</div>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Email</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="error">{error}</div>
-              <input type="submit" className="btn btn-primary" />
-            </form>
-          </div>
+      <MainNavbar mainPage={"About"} authPage={"Login"} />
+      <div className='loginbackground'>
+        <Form
+          signup={false}
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          error={error}
+          handleSubmit={handleSubmit}
+        />
+        <div className="signup">
+          Don't have an account? <NavLink to="/signup">Sign up</NavLink>
         </div>
-      </div>
-      <div className="signup">
-        Don't have an account? <NavLink to="/signup">Sign up</NavLink>
       </div>
     </>
   );

@@ -1,9 +1,7 @@
 import React from "react";
 import MainNavbar from './main_navbar';
-import gql from "graphql-tag";
-import { useQuery } from "@apollo/react-hooks";
-import { withRouter } from "react-router-dom";
-import { TOKEN, EXPIRATION } from "../constants";
+import { gql, useQuery } from "@apollo/client";
+import { withRouter, Redirect } from "react-router-dom";
 
 export const GET_USER = gql`
   {
@@ -15,11 +13,9 @@ export const GET_USER = gql`
   }
 `
 
-const DashBoard = ({ history }) => {
+const DashBoard = ({ authenticator }) => {
   const handleLogout = () => {
-    sessionStorage.removeItem(TOKEN);
-    sessionStorage.removeItem(EXPIRATION);
-    history.push("/");
+    authenticator.logout();
   };
 
   const { error, loading, data } = useQuery(GET_USER);
@@ -27,7 +23,8 @@ const DashBoard = ({ history }) => {
     return <p>Loading...</p>
   }
   if(error) {
-    return <p>Please login or signup first.</p>
+    authenticator.logout();
+    return <Redirect to="/" />;
   }
   return (
     <>

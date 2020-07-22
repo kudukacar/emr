@@ -18,7 +18,7 @@ class Query(graphene.ObjectType):
     def resolve_user(self, info):
         user = info.context.user
         if user.is_anonymous:
-            raise Exception('Authentication failed')
+            raise Exception('Authentication failed.')
         return user
 
 
