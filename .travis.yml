@@ -22,6 +22,7 @@ jobs:
         - psql -c 'create database travis_ci_test;' -U postgres
         - pipenv install
         - python manage.py runserver &
+        - python manage.py migrate
       install:
         - cd frontend
         - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
