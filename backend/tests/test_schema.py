@@ -77,7 +77,7 @@ class LoginTests(GraphQLTestCase):
         self.assertEqual(
             set(content.keys()), set(['errors', 'data']))
         self.assertEqual(content['errors'][0]['message'],
-                         "Please enter a valid username and password.")
+                         "Please enter a valid email and password.")
 
 
 class CreateUserTests(GraphQLTestCase):

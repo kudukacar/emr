@@ -49,6 +49,7 @@ const Login = ({ authenticator, history }) => {
       <MainNavbar mainPage={"About"} authPage={"Login"} />
       <div className='loginbackground'>
         <Form
+          title="Access SmartEMR"
           signup={false}
           email={email}
           setEmail={setEmail}
@@ -58,7 +59,7 @@ const Login = ({ authenticator, history }) => {
           handleSubmit={handleSubmit}
         />
         <div className="signup">
-          Don't have an account? <NavLink to="/signup">Sign up</NavLink>
+          Don't have an account? <NavLink className="signuplink" to="/signup">Sign up</NavLink>
         </div>
       </div>
     </>

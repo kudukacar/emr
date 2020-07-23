@@ -36,7 +36,7 @@ class LogIn(graphene.Mutation):
         user = authenticate(email=email, password=password)
 
         if user is None:
-            raise Exception('Please enter a valid username and password.')
+            raise Exception('Please enter a valid email and password.')
 
         login(info.context, user)
         token = get_token(user)

@@ -5,8 +5,9 @@ import {
   Navbar,
   Nav
 } from "react-bootstrap";
+import "./main_navbar.css";
 
-const MainNavbar = ({ mainPage, authPage, handleLogout }) => {
+const MainNavbar = ({ mainPage, authPage, handleLogout, location }) => {
   return (
     <Navbar
       collapseOnSelect
@@ -32,21 +33,25 @@ const MainNavbar = ({ mainPage, authPage, handleLogout }) => {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto"></Nav>
         <Nav>
-          <Nav.Link
-            to={mainPage === "About" ? "/" : "/dashboard"}
-            style={{ color: "#429fdd" }}
-            as={NavLink}
-          >
-            {mainPage}
-          </Nav.Link>
-          <Nav.Link
-            onClick={handleLogout}
-            to="/login"
-            style={{ color: "#429fdd" }}
-            as={NavLink}
-          >
-            {authPage}
-          </Nav.Link>
+          <span className="navbarlink">
+            <Nav.Link
+              to={mainPage === "About" ? "/" : "/dashboard"}
+              style={{ color: "#429fdd" }}
+              as={NavLink}
+            >
+              {mainPage}
+            </Nav.Link>
+          </span>
+          <span className="navbarlink">
+            <Nav.Link
+              onClick={handleLogout}
+              to="/login"
+              style={{ color: "#429fdd" }}
+              as={NavLink}
+            >
+              {authPage}
+            </Nav.Link>
+          </span>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

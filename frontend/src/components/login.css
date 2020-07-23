@@ -18,3 +18,11 @@
     background-color: #8FC1E3;
     min-height: 92vh;
 }
+
+.signuplink {
+    color: blue;
+}
+
+.signuplink:hover {
+    color: blue
+}

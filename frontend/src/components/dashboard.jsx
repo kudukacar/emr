@@ -33,7 +33,7 @@ const DashBoard = ({ authenticator }) => {
         authPage={"Logout"}
         handleLogout={handleLogout}
       />
-      <div>Welcome {data.user.firstName} to your dashboard</div>
+      <div>Welcome {data.user.firstName} to your dashboard.  This page is under development.</div>
     </>
   );
 }

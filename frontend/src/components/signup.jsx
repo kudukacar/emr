@@ -52,6 +52,7 @@ const Signup = ({ history, authenticator }) => {
       <MainNavbar mainPage={"About"} authPage={"Login"} />
       <div className='loginbackground'>
         <Form
+          title="Start using SmartEMR"
           signup={true}
           firstName={firstName}
           setFirstName={setFirstName}
