@@ -16,6 +16,9 @@ django-cors-headers = "*"
 zappa = "*"
 psycopg2-binary = "*"
 zappa-django-utils = "*"
+graphene-django = "*"
+django-graphql-jwt = "*"
+django-graphql-extensions = "*"
 
 [requires]
 python_version = "3.8"

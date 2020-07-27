@@ -3,17 +3,31 @@ jobs:
     - name: "Backend"
       python: 3.8
       language: python
+      services:
+        - postgresql
       install:
         - pipenv install
+      before_script:
+        - psql -c 'create database travis_ci_test;' -U postgres
       script:
         - python manage.py test
       after_success:
         - test $TRAVIS_BRANCH = "master" && zappa update dev && zappa manage dev migrate
     - name: "Frontend"
-      node_js: 12
-      language: node_js
+      python: 3.8
+      language: python
+      services:
+        - postgresql
+      before_install:
+        - psql -c 'create database travis_ci_test;' -U postgres
+        - pipenv install
+        - python manage.py runserver &
+        - python manage.py migrate
       install:
         - cd frontend
+        - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+        - nvm install 12.16.3
+        - nvm use 12.16.3
         - npm install -g travis-ci-cloudfront-invalidation
         - npm install
       script:

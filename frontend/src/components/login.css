@@ -1,0 +1,28 @@
+.login {
+    font-size: 30px;
+    text-align: center;
+    padding: 50px 0px;
+}
+
+.error {
+    color: red;
+    padding: 10px 0px;
+}
+
+.signup {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.loginbackground {
+    background-color: #8FC1E3;
+    min-height: 92vh;
+}
+
+.signuplink {
+    color: blue;
+}
+
+.signuplink:hover {
+    color: blue
+}
