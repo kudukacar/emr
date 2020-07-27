@@ -9,7 +9,7 @@ describe("Signup and login", () => {
   }
   const { firstName, lastName, email, password } = user;
 
-  it("signs up and logs out a user", () => {
+  it("signs up and logs out a user, and a logged in user can't access the sign up page", () => {
     cy.visit('/signup')
 
     cy.get('input[name=firstname]').type(firstName)
@@ -21,6 +21,10 @@ describe("Signup and login", () => {
     cy.get("input[name=password]").type(`${password}{enter}`)
 
     cy.url().should('include', '/dashboard')
+
+    cy.contains(firstName)
+
+    cy.visit('/signup')
 
     cy.contains(firstName)
 
@@ -69,7 +73,7 @@ describe("Signup and login", () => {
     cy.url().should("include", "/signup")
   });
 
-  it("logs in and logs out a valid user", () => {
+  it("logs in and logs out a valid user and a logged in user can't access the login page", () => {
     cy.visit("/login");
 
     cy.get("input[name=email]").type(email)
@@ -77,6 +81,10 @@ describe("Signup and login", () => {
     cy.get("input[name=password]").type(`${password}{enter}`)
 
     cy.url().should("include", "/dashboard")
+
+    cy.contains(firstName)
+
+    cy.visit("/login")
 
     cy.contains(firstName)
 
@@ -95,5 +103,11 @@ describe("Signup and login", () => {
     cy.url().should("include", "/login")
 
     cy.contains("Please enter a valid email and password")
+  })
+
+  it("does not allow a non-logged in user to access the dashboard", () => {
+    cy.visit("/dashboard")
+
+    cy.url().should("include", "/login")
   })
 })
