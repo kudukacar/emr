@@ -12,7 +12,7 @@ jobs:
       script:
         - python manage.py test
       after_success:
-        - test $TRAVIS_BRANCH = "master" && zappa update dev && zappa manage dev migrate
+        - test $TRAVIS_BRANCH = "master" && zappa update dev && zappa manage dev migrate backend zero
     - name: "Frontend"
       python: 3.8
       language: python
