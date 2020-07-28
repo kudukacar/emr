@@ -16,6 +16,10 @@ if (process.env.NODE_ENV === "development") {
 }
 const httpLink = createHttpLink({
   uri,
+  withCredentials: true,
+  fetchOptions: {
+    mode: "cors"
+  }
 });
 const authLink = setContext((_, { headers }) => {
   const token = sessionStorage.getItem(TOKEN);
