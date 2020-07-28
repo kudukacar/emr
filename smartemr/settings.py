@@ -140,8 +140,6 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000", "https://d18umyxvxdcfnb.cloudfront.net",
 ]
 
-CORS_ALLOW_CREDENTIALS: True
-
 GRAPHENE = {
     'SCHEMA': 'backend.schema.schema',
     'MIDDLEWARE': [

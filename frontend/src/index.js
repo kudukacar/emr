@@ -12,14 +12,10 @@ let uri;
 if (process.env.NODE_ENV === "development") {
   uri = "http://localhost:8000/graphql/";
 } else {
-  uri = "https://4edmgavrwe.execute-api.us-east-1.amazonaws.com/graphql/";
+  uri = "https://4edmgavrwe.execute-api.us-east-1.amazonaws.com/dev/graphql/";
 }
 const httpLink = createHttpLink({
-  uri,
-  withCredentials: true,
-  fetchOptions: {
-    mode: "cors"
-  }
+  uri
 });
 const authLink = setContext((_, { headers }) => {
   const token = sessionStorage.getItem(TOKEN);
